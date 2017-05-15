@@ -43,5 +43,12 @@
 	  	"searchStrings": [
 		  	"/LP/"
 		]
+	},
+	{
+	  	"poolName": "ViaLTC",
+	  	"url": "https://www.vialtc.com/",
+	  	"searchStrings": [
+		  	"/ViaLTC/"
+		]
 	}
 ]
