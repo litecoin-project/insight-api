@@ -5,6 +5,7 @@ process.env.NODE_ENV = 'test';
 var should = require('should');
 var sinon = require('sinon');
 var InsightAPI = require('../lib/index');
+var transactions = require('./data/txs.json');
 
 describe('Index', function() {
   describe('@constructor', function() {
@@ -207,5 +208,31 @@ describe('Index', function() {
       index.setupRoutes(app);
       index._getRateLimiter.callCount.should.equal(0);
     });
+  });
+
+  describe('#transactionEventHandler', function() {
+    var node = {
+      log: sinon.stub()
+    };
+    var index = new InsightAPI({node: node})
+    var storeCC = sinon.spy(index, 'storeCCTransacction')
+    var gtt = sinon.stub(index.txController, 'getTransformTransaction', function (txId, cb) {
+      var tx = transactions.filter(function (tx){
+        return tx.hash === txId
+      })[0];
+      cb(tx.json)
+    })
+
+    it('should not store a normal transaction', () => {
+      const tx = transactions[0]
+      index.transactionEventHandler(new Buffer(tx.hex, 'hex'));
+      storeCC.called.should.equal(false);
+    })
+
+    it('should store the transaction if its cc', () => {
+      const tx = transactions[1]
+      index.transactionEventHandler(new Buffer(tx.hex, 'hex'));
+      storeCC.called.should.equal(true);
+    })
   });
 });

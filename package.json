@@ -61,12 +61,16 @@
   "bitcoreNode": "lib",
   "dependencies": {
     "async": "*",
+    "body-parser": "^1.13.3",
+    "cc-assetid-encoder": "^0.6.2",
+    "cc-transaction": "^1.2.1",
+    "compression": "^1.6.1",
+    "config": "^1.26.1",
     "litecore-lib": "^0.13.22",
     "litecore-message": "^1.0.5",
-    "body-parser": "^1.13.3",
-    "compression": "^1.6.1",
     "lodash": "^2.4.1",
     "lru-cache": "^4.0.1",
+    "mongoose": "^4.7.6",
     "morgan": "^1.7.0",
     "request": "^2.64.0"
   },
