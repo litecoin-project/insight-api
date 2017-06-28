@@ -4,7 +4,7 @@ process.env.NODE_ENV = 'test';
 
 var should = require('should');
 var sinon = require('sinon');
-var InsightAPI = require('../lib/index');
+var InsightCCAPI = require('../lib/index');
 var transactions = require('./data/txs.json');
 
 describe('Index', function() {
@@ -12,7 +12,7 @@ describe('Index', function() {
     it('will set rate limiter options', function() {
       var options = {};
       var node = {};
-      var index = new InsightAPI({
+      var index = new InsightCCAPI({
         rateLimiterOptions: options,
         node: node
       });
@@ -20,7 +20,7 @@ describe('Index', function() {
     });
     it('will set disable rate limiter option', function() {
       var node = {};
-      var index = new InsightAPI({
+      var index = new InsightCCAPI({
         disableRateLimiter: true,
         node: node
       });
@@ -33,7 +33,7 @@ describe('Index', function() {
         whitelist: ['127.0.0.1']
       };
       var node = {};
-      var index = new InsightAPI({
+      var index = new InsightCCAPI({
         rateLimiterOptions: options,
         node: node
       });
@@ -46,7 +46,7 @@ describe('Index', function() {
       var node = {
         log: sinon.stub()
       };
-      var index = new InsightAPI({
+      var index = new InsightCCAPI({
         enableCache: true,
         node: node
       });
@@ -66,7 +66,7 @@ describe('Index', function() {
       var node = {
         log: sinon.stub()
       };
-      var index = new InsightAPI({
+      var index = new InsightCCAPI({
         enableCache: false,
         node: node
       });
@@ -86,7 +86,7 @@ describe('Index', function() {
       var node = {
         log: sinon.stub()
       };
-      var index = new InsightAPI({
+      var index = new InsightCCAPI({
         enableCache: true,
         cacheShortSeconds: 35,
         node: node
@@ -107,7 +107,7 @@ describe('Index', function() {
       var node = {
         log: sinon.stub()
       };
-      var index = new InsightAPI({
+      var index = new InsightCCAPI({
         enableCache: true,
         node: node
       });
@@ -129,7 +129,7 @@ describe('Index', function() {
       var node = {
         log: sinon.stub()
       };
-      var index = new InsightAPI({
+      var index = new InsightCCAPI({
         enableCache: true,
         cacheLongSeconds: 86400000,
         node: node
@@ -150,7 +150,7 @@ describe('Index', function() {
       var node = {
         log: sinon.stub()
       };
-      var index = new InsightAPI({
+      var index = new InsightCCAPI({
         enableCache: true,
         node: node
       });
@@ -170,7 +170,7 @@ describe('Index', function() {
   describe('#setupRoutes', function() {
     it('will use rate limiter by default', function() {
       var node = {};
-      var index = new InsightAPI({
+      var index = new InsightCCAPI({
         node: node
       });
       var middlewareFunc = sinon.stub();
@@ -193,7 +193,7 @@ describe('Index', function() {
     });
     it('will NOT use rate limiter if disabled', function() {
       var node = {};
-      var index = new InsightAPI({
+      var index = new InsightCCAPI({
         node: node,
         disableRateLimiter: true
       });
@@ -214,7 +214,7 @@ describe('Index', function() {
     var node = {
       log: sinon.stub()
     };
-    var index = new InsightAPI({node: node})
+    var index = new InsightCCAPI({node: node})
     var storeCC = sinon.spy(index, 'storeCCTransacction')
     var gtt = sinon.stub(index.txController, 'getTransformTransaction', function (txId, cb) {
       var tx = transactions.filter(function (tx){

@@ -1,5 +1,5 @@
 {
-  "name": "insight-lite-api",
+  "name": "insight-lite-cc-api",
   "description": "A Litecoin blockchain REST and web socket API service for Litecore Node.",
   "version": "0.4.4",
   "repository": "git://github.com/litecoin-project/insight-lite-api.git",
