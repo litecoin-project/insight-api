@@ -220,7 +220,7 @@ describe('Index', function() {
       var tx = transactions.filter(function (tx){
         return tx.hash === txId
       })[0];
-      cb(tx.json)
+      cb(null, tx.json)
     })
 
     it('should not store a normal transaction', () => {
