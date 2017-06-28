@@ -1,5 +1,7 @@
 'use strict';
 
+process.env.NODE_ENV = 'test';
+
 var should = require('should');
 var sinon = require('sinon');
 var MessagesController = require('../lib/messages');

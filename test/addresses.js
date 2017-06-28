@@ -1,4 +1,7 @@
 'use strict';
+
+process.env.NODE_ENV = 'test';
+
 var sinon = require('sinon');
 var should = require('should');
 var AddressController = require('../lib/addresses');
