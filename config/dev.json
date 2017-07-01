@@ -1,3 +1,4 @@
 {
+  "firstColoredBlock": 1229200,
   "DBHost": "mongodb://localhost/insignt-lite-cc-dev"
 }

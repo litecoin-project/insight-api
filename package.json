@@ -59,14 +59,21 @@
   },
   "main": "lib",
   "bitcoreNode": "lib",
+  "bin": {
+    "litecore-cc": "bin/litecore-cc"
+  },
   "dependencies": {
     "async": "*",
     "bluebird": "^3.5.0",
     "body-parser": "^1.13.3",
     "cc-assetid-encoder": "^0.6.2",
     "cc-transaction": "^1.2.1",
+    "chalk": "^2.0.1",
+    "commander": "^2.10.0",
     "compression": "^1.6.1",
     "config": "^1.26.1",
+    "dotenv": "^4.0.0",
+    "liftoff": "^2.3.0",
     "litecore-lib": "^0.13.22",
     "litecore-message": "^1.0.5",
     "lodash": "^2.4.1",
