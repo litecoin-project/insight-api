@@ -78,7 +78,8 @@
     "litecore-message": "^1.0.5",
     "lodash": "^2.4.1",
     "lru-cache": "^4.0.1",
-    "mongoose": "^4.7.6",
+    "mkdirp": "^0.5.1",
+    "mongoose": "^4.10.8",
     "morgan": "^1.7.0",
     "request": "^2.64.0"
   },
