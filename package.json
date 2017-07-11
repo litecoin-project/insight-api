@@ -63,7 +63,7 @@
     "litecore-cc": "bin/litecore-cc"
   },
   "dependencies": {
-    "async": "*",
+    "async": "2.5.0",
     "bluebird": "^3.5.0",
     "body-parser": "^1.13.3",
     "cc-assetid-encoder": "^0.6.2",
@@ -79,7 +79,7 @@
     "lodash": "^2.4.1",
     "lru-cache": "^4.0.1",
     "mkdirp": "^0.5.1",
-    "mongoose": "^4.10.8",
+    "mongoose": "4.10.8",
     "morgan": "^1.7.0",
     "request": "^2.64.0"
   },
