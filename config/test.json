@@ -1,5 +1,6 @@
 {
   "firstColoredBlock": 1227000,
   "DBHost": "mongodb://localhost/insignt-lite-cc-test",
-  "default_fee":5000
+  "default_fee":5000,
+  "network":"litecoin-testnet"
 }
