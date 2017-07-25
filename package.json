@@ -64,6 +64,7 @@
   },
   "dependencies": {
     "async": "2.5.0",
+    "bitcoinjs-testnets": "^1.0.10",
     "bluebird": "^3.5.0",
     "body-parser": "^1.13.3",
     "cc-assetid-encoder": "^0.6.2",

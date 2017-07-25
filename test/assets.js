@@ -47,7 +47,7 @@ var issueAddress="mwrPT9XidZ4KvtdfvbkCaSS5GtakZzXp6J";
 var body={
   address:address,
   issueAddress: issueAddress,
-  amount: 3000,
+  amount: 1,
   divisibility: 0,
   fee: 50000,
   flags: {
@@ -55,30 +55,7 @@ var body={
   },
   metadata: {
     assetName: 'Testing'
-  } /*
-,utxos: [
-        {
-            txid: "c927089a205398393027c3c5f29052a4c1a65f9ab37f674b04121fd2b903531f",
-            index: 1,
-            value: 899949400,
-            scriptPubKey: {
-                hex: "76a91452d8635d118a2f919c596caaee4420d8d45a699c88ac",
-                addresses: [
-                    "mo4zvhJCKGXZXZCPAuLBWrQtbqM6BBcyAb"
-                ]
-            }
-        }
-    ] 
- ,utxos: [{
-    txid: '86be3c570060440bdbe1dc507f728b22119b2f354b93c8045eefc47d464425b6',
-    index: 0,
-    value: 900000000,
-    scriptPubKey: {
-      addresses: [address],
-      hex: '76a91452d8635d118a2f919c596caaee4420d8d45a699c88ac'
-    }
-  }]
- */
+  }  
 }
 
 
@@ -142,17 +119,5 @@ request({
 });
 
 /* 
-{
-    "txid": "46e85e1e50ca6c53ab74827215017bb8e3326a26910fe455073edb0214b412c3"
-}
-{
-    "txid": "08ce8594eb3e2711b6cefab0f6097f17045e6f9d83da25a933cc64447016e7c8"
-}
-{
-    "txid": "154fd301cab69dc9065b3f4aee1064592776ae8732f4f42c8b998175a7aa93d2"
-}
-{
-    mwrPT9XidZ4KvtdfvbkCaSS5GtakZzXp6J
-    "txid": "3fb8b7e9f044b501032f0627c0124764318a0a47421eb47832ff055e2891d7c6"
-}
+
 */
