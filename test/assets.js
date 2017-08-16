@@ -94,30 +94,25 @@ const utxos = [
 ];
 
 describe.only('AssetController', () => {
+// _evaluateBuildTxn
 
   describe('_calculateMiningFee', () => {
     const node = {};
     const controller = new AssetController(node);
-    controller._fetchEstimateFee = () => new Promise((resolve) => { resolve(100000); });
-    let ins = 2;
-    let outs = 2;
+    let ins = 1;
+    let outs = 30;
+    let feeRate = 100000;
     let fee;
 
     it('should calculate and return the Mining Fee', () => {
-      controller._calculateMiningFee(ins, outs)
-        .then((miningFee) => {
-          fee = miningFee;
-          should(fee).be.a.Number();
-          return controller._calculateMiningFee(++ins, outs);
-        })
-        .then((miningFee) => {
-          should(miningFee).be.exactly(fee + 180);
-          fee = miningFee;
-          return controller._calculateMiningFee(++ins, ++outs);
-        })
-        .then((miningFee) => {
-          should(miningFee).be.exactly(fee + 180 + 34);
-        });
+      let miningFee = controller._calculateMiningFee(ins, outs, feeRate);
+      fee = miningFee;
+      should(fee).be.a.Number();
+      miningFee = controller._calculateMiningFee(++ins, outs, feeRate);
+      should(miningFee).be.exactly(fee + 18000);
+      fee = miningFee;
+      miningFee = controller._calculateMiningFee(++ins, ++outs, feeRate);
+      should(miningFee).be.exactly(fee + 18000 + 3400);
     });
   });
 
@@ -131,7 +126,6 @@ describe.only('AssetController', () => {
   describe('_evaluateInputsValue', () => {
     const node = {};
     const controller = new AssetController(node);
-    controller._fetchEstimateFee = () => new Promise((resolve) => { resolve(100000); });
     const body = {
       utxos: [ { value: 30000 } ],
       amount: 30000,
@@ -142,11 +136,9 @@ describe.only('AssetController', () => {
         ins: new Array(1),
         outs: new Array(30),
       };
-      controller._evaluateInputsValue(body, txn)
-        .then((result) => {
-          should(result.pass).be.exactly(false);
-          should(result.valueNeeded).be.exactly(151000);
-        });
+      const result = controller._evaluateInputsValue(body, txn, 100000);
+      should(result.pass).be.exactly(false);
+      should(result.valueNeeded).be.exactly(151000);
     });
 
     it('should pass and complete the value needed with one utxo', () => {
@@ -155,11 +147,9 @@ describe.only('AssetController', () => {
         outs: new Array(30),
       };
       body.utxos = [ { value: 160000 } ];
-      controller._evaluateInputsValue(body, txn)
-        .then((result) => {
-          should(result.pass).be.exactly(true);
-          should(result.valueNeeded).be.exactly(151000);
-        });
+      const result = controller._evaluateInputsValue(body, txn, 100000);
+      should(result.pass).be.exactly(true);
+      should(result.valueNeeded).be.exactly(151000);
     });
 
     it('should pass and complete the value needed with three utxos', () => {
@@ -168,11 +158,9 @@ describe.only('AssetController', () => {
         outs: new Array(30),
       };
       body.utxos = [ { value: 100000 }, { value: 50000 }, { value: 40000 } ];
-      controller._evaluateInputsValue(body, txn)
-        .then((result) => {
-          should(result.pass).be.exactly(true);
-          should(result.valueNeeded).be.exactly(187000);
-        });
+      const result = controller._evaluateInputsValue(body, txn, 100000);
+      should(result.pass).be.exactly(true);
+      should(result.valueNeeded).be.exactly(187000);
     });
   });
 
@@ -213,7 +201,6 @@ describe.only('AssetController', () => {
     const body = { address: 1 };
     const utxosToTest = [].concat(utxos);
     const node = {
-      getAddressUnspentOutputs: sinon.stub().callsArgWith(2, null, utxosToTest),
       services: {
         bitcoind: {
           height: 534203,
@@ -223,9 +210,8 @@ describe.only('AssetController', () => {
 
     describe('when the first one is enough', () => {
       const controller = new AssetController(node);
-      controller.addressController._utxo = sinon.stub().callsArgWith(2, null, [].concat(utxosToTest));
       it('should get the higher value utxo only', () => {
-        controller._loadBestUtxos(body, 25000, false)
+        controller._loadBestUtxos(body, utxosToTest, 25000, false)
           .then((neededUtxos) => {
             should(neededUtxos.length).be.exactly(1);
           });
@@ -234,11 +220,9 @@ describe.only('AssetController', () => {
 
     describe('when two are needed', () => {
       utxosToTest.pop(); // remove the highest utxo to need more
-      node.getAddressUnspentOutputs = sinon.stub().callsArgWith(2, null, [].concat(utxosToTest));
       const controller = new AssetController(node);
-      controller.addressController._utxo = sinon.stub().callsArgWith(2, null, [].concat(utxosToTest));
       it('should get the first two utxo with higher value', () => {
-        controller._loadBestUtxos(body, 40000, false)
+        controller._loadBestUtxos(body, utxosToTest, 40000, false)
           .then((neededUtxos) => {
             should(neededUtxos.length).be.exactly(2);
           });
@@ -247,13 +231,21 @@ describe.only('AssetController', () => {
 
     describe('when three are needed', () => {
       utxosToTest.pop(); // remove the highest utxo to need more
-      node.getAddressUnspentOutputs = sinon.stub().callsArgWith(2, null, [].concat(utxosToTest));
       const controller = new AssetController(node);
-      controller.addressController._utxo = sinon.stub().callsArgWith(2, null, [].concat(utxosToTest));
       it('should get the first three utxo with higher value', () => {
-        controller._loadBestUtxos(body, 60000, false)
+        controller._loadBestUtxos(body, utxosToTest, 60000, false)
           .then((neededUtxos) => {
             should(neededUtxos.length).be.exactly(3);
+          });
+      });
+    });
+
+    describe('when there are not utxos available', () => {
+      const controller = new AssetController(node);
+      it('should throw insufficient funds error', () => {
+        controller._loadBestUtxos(body, [], 25000, false)
+          .catch((err) => {
+            should(err.message).be.exactly('Not enough funds to make the transaction');
           });
       });
     });
@@ -298,10 +290,9 @@ describe.only('AssetController', () => {
       const controller = new AssetController(node);
       controller.ccBuildTypes.issue = (body) => { return buildObject(body.utxos.length); };
       controller.addressController._utxo = sinon.stub().callsArgWith(2, null, [].concat(utxosToTest));
-      controller._fetchEstimateFee = () => new Promise((resolve) => { resolve(100000); });
 
       it('should cycle through utxos until it achieves the value needed', () => {
-        controller._loadMinimumUtxosCycle(body, 90000, 'issue', false)
+        controller._loadMinimumUtxosCycle(body, 90000, 100000, 'issue', false)
           .then((buildTxn) => {
             should(buildTxn.txb.tx.ins.length).be.exactly(3);
           });
@@ -335,10 +326,32 @@ describe.only('AssetController', () => {
       const controller = new AssetController(node);
       controller.ccBuildTypes.issue = (body) => { return buildObject(body.utxos.length); };
       controller.addressController._utxo = sinon.stub().callsArgWith(2, null, [].concat(utxosToTest));
-      controller._fetchEstimateFee = () => new Promise((resolve) => { resolve(100000); });
 
       it('should cycle through utxos and return insufficient funds', () => {
-        controller._loadMinimumUtxosCycle(body, 90000, 'issue', false)
+        controller._loadMinimumUtxosCycle(body, 90000, 100000, 'issue', false)
+          .catch((err) => {
+            should(err.message).be.exactly('Not enough funds to make the transaction');
+          });
+      });
+    });
+
+    describe('when there are not utxos to spend', () => {
+      const utxosToTest = [];
+      const node = {
+        getAddressUnspentOutputs: sinon.stub().callsArgWith(2, null, utxosToTest),
+        services: {
+          bitcoind: {
+            height: 534203,
+          },
+        },
+      };
+
+      const controller = new AssetController(node);
+      controller.ccBuildTypes.issue = (body) => { return buildObject(body.utxos.length); };
+      controller.addressController._utxo = sinon.stub().callsArgWith(2, null, [].concat(utxosToTest));
+
+      it('should return insufficient funds immediately', () => {
+        controller._loadMinimumUtxosCycle(body, 90000, 100000, 'issue', false)
           .catch((err) => {
             should(err.message).be.exactly('Not enough funds to make the transaction');
           });
@@ -394,7 +407,7 @@ describe.only('AssetController', () => {
       const controller = new AssetController(node);
       controller.ccBuildTypes.issue = (body) => { return buildObject(body.utxos.length); };
       controller.addressController._utxo = sinon.stub().callsArgWith(2, null, [].concat(utxosToTest));
-      controller._fetchEstimateFee = () => new Promise((resolve) => { resolve(100000); });
+      controller._fetchEstimateFeeRate = () => new Promise((resolve) => { resolve(100000); });
 
       it('should execute res.jsonp without running the cycle', (done) => {
         const res = {
@@ -429,7 +442,7 @@ describe.only('AssetController', () => {
       const controller = new AssetController(node);
       controller.ccBuildTypes.issue = (body) => { return buildObject(body.utxos.length); };
       controller.addressController._utxo = sinon.stub().callsArgWith(2, null, [].concat(utxosToTest));
-      controller._fetchEstimateFee = () => new Promise((resolve) => { resolve(100000); });
+      controller._fetchEstimateFeeRate = () => new Promise((resolve) => { resolve(100000); });
 
       it('should execute res.jsonp after running the cycle', (done) => {
         const res = {
@@ -437,6 +450,40 @@ describe.only('AssetController', () => {
             should(result.txb.tx.ins.length).be.exactly(3);
             done();
           },
+        };
+        controller._evaluateBuildTxn(body, 'issue', false, res);
+      });
+    });
+
+    describe('when there are not utxos for the address', () => {
+      const body = {
+        address: 1,
+        amount: 30000,
+        utxos: [
+          {
+            txid: "a3003756db8dd832087b98c5adcce8e1fade89959519713edecccadc44a4d2f4",
+            value: 100000,
+          },
+        ],
+      };
+      const node = {
+        getAddressUnspentOutputs: sinon.stub().callsArgWith(2, null, []),
+        services: {
+          bitcoind: {
+            height: 534203,
+          },
+        },
+      };
+      const controller = new AssetController(node);
+      controller.ccBuildTypes.issue = (body) => { return buildObject(body.utxos.length); };
+      controller.addressController._utxo = sinon.stub().callsArgWith(2, null, []);
+      controller._fetchEstimateFeeRate = () => new Promise((resolve) => { resolve(100000); });
+
+      it('should execute res.jsonp after running the cycle', (done) => {
+        const res = { jsonp: () => {} };
+        controller.common.handleErrors = (err) => {
+          should(err.message).be.exactly('The address does not have inputs');
+          done();
         };
         controller._evaluateBuildTxn(body, 'issue', false, res);
       });
