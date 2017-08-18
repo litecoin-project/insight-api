@@ -60,6 +60,20 @@ const utxos = [
     "addresses": [
       "mwrPT9XidZ4KvtdfvbkCaSS5GtakZzXp6J",
     ],
+    "txid": "a3003756db8dd832087b98c5adcce8e1fade89959519713edecccadc44a4d2f4",
+    "value": 30000,
+  },
+  {
+    "addresses": [
+      "mwrPT9XidZ4KvtdfvbkCaSS5GtakZzXp6J",
+    ],
+    "txid": "a3003756db8dd832087b98c5adcce8e1fade89959519713edecccadc44a4d2f4",
+    "value": 25000,
+  },
+  {
+    "addresses": [
+      "mwrPT9XidZ4KvtdfvbkCaSS5GtakZzXp6J",
+    ],
     "txid": "32e3c6c28b50183c9b407fb3ab4d83ea0d3ad195325253784772beea0db82c34",
     "value": 20000,
   },
@@ -77,24 +91,12 @@ const utxos = [
     "txid": "a3003756db8dd832087b98c5adcce8e1fade89959519713edecccadc44a4d2f4",
     "value": 15000,
   },
-  {
-    "addresses": [
-      "mwrPT9XidZ4KvtdfvbkCaSS5GtakZzXp6J",
-    ],
-    "txid": "a3003756db8dd832087b98c5adcce8e1fade89959519713edecccadc44a4d2f4",
-    "value": 25000,
-  },
-  {
-    "addresses": [
-      "mwrPT9XidZ4KvtdfvbkCaSS5GtakZzXp6J",
-    ],
-    "txid": "a3003756db8dd832087b98c5adcce8e1fade89959519713edecccadc44a4d2f4",
-    "value": 30000,
-  },
 ];
 
 describe.only('AssetController', () => {
 // _evaluateBuildTxn
+// _loadMinimumUtxosCycle DONE
+// _loadBestUtxos DONE
 
   describe('_calculateMiningFee', () => {
     const node = {};
@@ -198,8 +200,6 @@ describe.only('AssetController', () => {
   });
 
   describe('_loadBestUtxos', () => {
-    const body = { address: 1 };
-    const utxosToTest = [].concat(utxos);
     const node = {
       services: {
         bitcoind: {
@@ -207,11 +207,19 @@ describe.only('AssetController', () => {
         },
       },
     };
+    const handle = {
+      utxos: [].concat(utxos),
+      utxosIterator: 0,
+      valueNeeded: 25000,
+      includeAssets: false,
+      choosenUtxos: [],
+    };
 
     describe('when the first one is enough', () => {
+      const handleToTest = Object.assign({}, handle);
       const controller = new AssetController(node);
       it('should get the higher value utxo only', () => {
-        controller._loadBestUtxos(body, utxosToTest, 25000, false)
+        controller._loadBestUtxos(handleToTest)
           .then((neededUtxos) => {
             should(neededUtxos.length).be.exactly(1);
           });
@@ -219,31 +227,37 @@ describe.only('AssetController', () => {
     });
 
     describe('when two are needed', () => {
-      utxosToTest.pop(); // remove the highest utxo to need more
+      const handleToTest = Object.assign({}, handle);
+      handleToTest.valueNeeded = 40000;
+      handle.utxos.shift(); // remove the highest utxo to need more
       const controller = new AssetController(node);
       it('should get the first two utxo with higher value', () => {
-        controller._loadBestUtxos(body, utxosToTest, 40000, false)
+        controller._loadBestUtxos(handleToTest)
           .then((neededUtxos) => {
             should(neededUtxos.length).be.exactly(2);
           });
       });
     });
 
-    describe('when three are needed', () => {
-      utxosToTest.pop(); // remove the highest utxo to need more
+    describe('when more are needed', () => {
+      const handleToTest = Object.assign({}, handle);
+      handleToTest.valueNeeded = 60000;
+      handle.utxos.shift(); // remove the highest utxo to need more
       const controller = new AssetController(node);
       it('should get the first three utxo with higher value', () => {
-        controller._loadBestUtxos(body, utxosToTest, 60000, false)
+        controller._loadBestUtxos(handleToTest)
           .then((neededUtxos) => {
-            should(neededUtxos.length).be.exactly(3);
+            should(neededUtxos.length).be.exactly(4);
           });
       });
     });
 
     describe('when there are not utxos available', () => {
+      const handleToTest = Object.assign({}, handle);
+      handleToTest.utxos = [];
       const controller = new AssetController(node);
       it('should throw insufficient funds error', () => {
-        controller._loadBestUtxos(body, [], 25000, false)
+        controller._loadBestUtxos(handleToTest)
           .catch((err) => {
             should(err.message).be.exactly('Not enough funds to make the transaction');
           });
@@ -263,12 +277,21 @@ describe.only('AssetController', () => {
         },
       };
     };
+    const handle = {
+      body,
+      type: 'issue',
+      feeRate: 100000,
+      utxosIterator: 0,
+      valueNeeded: 90000,
+      includeAssets: false,
+      choosenUtxos: [],
+    };
 
     describe('when the utxos are enough', () => {
       const utxosToTest = [
         {
           txid: "a3003756db8dd832087b98c5adcce8e1fade89959519713edecccadc44a4d2f4",
-          value: 40000,
+          value: 100000,
         },
         {
           txid: "a3003756db8dd832087b98c5adcce8e1fade89959519713edecccadc44a4d2f4",
@@ -276,7 +299,7 @@ describe.only('AssetController', () => {
         },
         {
           txid: "a3003756db8dd832087b98c5adcce8e1fade89959519713edecccadc44a4d2f4",
-          value: 100000,
+          value: 40000,
         },
       ];
       const node = {
@@ -287,12 +310,13 @@ describe.only('AssetController', () => {
           },
         },
       };
+      const handleToTest = Object.assign({}, handle);
       const controller = new AssetController(node);
+      handleToTest.utxos = utxosToTest;
       controller.ccBuildTypes.issue = (body) => { return buildObject(body.utxos.length); };
-      controller.addressController._utxo = sinon.stub().callsArgWith(2, null, [].concat(utxosToTest));
 
       it('should cycle through utxos until it achieves the value needed', () => {
-        controller._loadMinimumUtxosCycle(body, 90000, 100000, 'issue', false)
+        controller._loadMinimumUtxosCycle(handleToTest)
           .then((buildTxn) => {
             should(buildTxn.txb.tx.ins.length).be.exactly(3);
           });
@@ -303,15 +327,15 @@ describe.only('AssetController', () => {
       const utxosToTest = [
         {
           txid: "a3003756db8dd832087b98c5adcce8e1fade89959519713edecccadc44a4d2f4",
-          value: 10000,
-        },
-        {
-          txid: "a3003756db8dd832087b98c5adcce8e1fade89959519713edecccadc44a4d2f4",
           value: 90000,
         },
         {
           txid: "a3003756db8dd832087b98c5adcce8e1fade89959519713edecccadc44a4d2f4",
           value: 20000,
+        },
+        {
+          txid: "a3003756db8dd832087b98c5adcce8e1fade89959519713edecccadc44a4d2f4",
+          value: 10000,
         },
       ];
       const node = {
@@ -322,13 +346,14 @@ describe.only('AssetController', () => {
           },
         },
       };
-
+      const handleToTest = Object.assign({}, handle);
       const controller = new AssetController(node);
+      handleToTest.utxos = utxosToTest;
       controller.ccBuildTypes.issue = (body) => { return buildObject(body.utxos.length); };
       controller.addressController._utxo = sinon.stub().callsArgWith(2, null, [].concat(utxosToTest));
 
       it('should cycle through utxos and return insufficient funds', () => {
-        controller._loadMinimumUtxosCycle(body, 90000, 100000, 'issue', false)
+        controller._loadMinimumUtxosCycle(handleToTest)
           .catch((err) => {
             should(err.message).be.exactly('Not enough funds to make the transaction');
           });
@@ -345,15 +370,16 @@ describe.only('AssetController', () => {
           },
         },
       };
-
+      const handleToTest = Object.assign({}, handle);
       const controller = new AssetController(node);
+      handleToTest.utxos = utxosToTest;
       controller.ccBuildTypes.issue = (body) => { return buildObject(body.utxos.length); };
       controller.addressController._utxo = sinon.stub().callsArgWith(2, null, [].concat(utxosToTest));
 
-      it('should return insufficient funds immediately', () => {
-        controller._loadMinimumUtxosCycle(body, 90000, 100000, 'issue', false)
+      it('should return the address does not have inputs immediately', () => {
+        controller._loadMinimumUtxosCycle(handleToTest)
           .catch((err) => {
-            should(err.message).be.exactly('Not enough funds to make the transaction');
+            should(err.message).be.exactly('The address does not have inputs');
           });
       });
     });
@@ -373,7 +399,7 @@ describe.only('AssetController', () => {
     const utxosToTest = [
       {
         txid: "a3003756db8dd832087b98c5adcce8e1fade89959519713edecccadc44a4d2f4",
-        value: 40000,
+        value: 100000,
       },
       {
         txid: "a3003756db8dd832087b98c5adcce8e1fade89959519713edecccadc44a4d2f4",
@@ -381,9 +407,15 @@ describe.only('AssetController', () => {
       },
       {
         txid: "a3003756db8dd832087b98c5adcce8e1fade89959519713edecccadc44a4d2f4",
-        value: 100000,
+        value: 40000,
       },
     ];
+    const handle = {
+      type: 'issue',
+      utxosIterator: 0,
+      includeAssets: false,
+      choosenUtxos: [],
+    };
 
     describe('when the current utxo is enough', () => {
       const body = {
@@ -404,9 +436,9 @@ describe.only('AssetController', () => {
           },
         },
       };
+      const handleToTest = Object.assign({}, handle, { utxos: body.utxos, body });
       const controller = new AssetController(node);
       controller.ccBuildTypes.issue = (body) => { return buildObject(body.utxos.length); };
-      controller.addressController._utxo = sinon.stub().callsArgWith(2, null, [].concat(utxosToTest));
       controller._fetchEstimateFeeRate = () => new Promise((resolve) => { resolve(100000); });
 
       it('should execute res.jsonp without running the cycle', (done) => {
@@ -416,7 +448,7 @@ describe.only('AssetController', () => {
             done();
           },
         };
-        controller._evaluateBuildTxn(body, 'issue', false, res);
+        controller._evaluateBuildTxn(handleToTest, res);
       });
     });
 
@@ -439,9 +471,9 @@ describe.only('AssetController', () => {
           },
         },
       };
+      const handleToTest = Object.assign({}, handle, { utxos: utxosToTest, body });
       const controller = new AssetController(node);
       controller.ccBuildTypes.issue = (body) => { return buildObject(body.utxos.length); };
-      controller.addressController._utxo = sinon.stub().callsArgWith(2, null, [].concat(utxosToTest));
       controller._fetchEstimateFeeRate = () => new Promise((resolve) => { resolve(100000); });
 
       it('should execute res.jsonp after running the cycle', (done) => {
@@ -451,7 +483,7 @@ describe.only('AssetController', () => {
             done();
           },
         };
-        controller._evaluateBuildTxn(body, 'issue', false, res);
+        controller._evaluateBuildTxn(handleToTest, res);
       });
     });
 
@@ -459,12 +491,7 @@ describe.only('AssetController', () => {
       const body = {
         address: 1,
         amount: 30000,
-        utxos: [
-          {
-            txid: "a3003756db8dd832087b98c5adcce8e1fade89959519713edecccadc44a4d2f4",
-            value: 100000,
-          },
-        ],
+        utxos: [],
       };
       const node = {
         getAddressUnspentOutputs: sinon.stub().callsArgWith(2, null, []),
@@ -474,18 +501,19 @@ describe.only('AssetController', () => {
           },
         },
       };
+      const handleToTest = Object.assign({}, handle, { utxos: [], body });
       const controller = new AssetController(node);
       controller.ccBuildTypes.issue = (body) => { return buildObject(body.utxos.length); };
-      controller.addressController._utxo = sinon.stub().callsArgWith(2, null, []);
+      // controller.addressController._utxo = sinon.stub().callsArgWith(2, null, []);
       controller._fetchEstimateFeeRate = () => new Promise((resolve) => { resolve(100000); });
 
       it('should execute res.jsonp after running the cycle', (done) => {
         const res = { jsonp: () => {} };
         controller.common.handleErrors = (err) => {
-          should(err.message).be.exactly('The address does not have inputs');
+          should(err.message).be.exactly('Not enough funds to make the transaction');
           done();
         };
-        controller._evaluateBuildTxn(body, 'issue', false, res);
+        controller._evaluateBuildTxn(handleToTest, res);
       });
     });
   });
