@@ -358,6 +358,48 @@ describe.only('AssetController', () => {
       });
     });
 
+    describe('when more than one cycle is needed', () => {
+      const utxosToTest = [
+        { value: 100000 },
+        { value: 50000 },
+        { value: 40000 },
+      ];
+      const node = {
+        getAddressUnspentOutputs: sinon.stub().callsArgWith(2, null, utxosToTest),
+        services: {
+          bitcoind: {
+            height: 534203,
+          },
+        },
+      };
+      let cyclesCounter = 0;
+      const handleToTest = Object.assign({}, handle);
+      const controller = new AssetController(node);
+      const buildObject = { txb: { tx: { ins: new Array(5), outs: new Array(30) } } };
+      handleToTest.utxos = utxosToTest;
+      controller.ccBuildTypes = { issue: () => buildObject };
+      controller._loadBestUtxos = () => new Promise((resolve) => { resolve(); });
+
+      // Mocking the cycles, returning 'pass: false' until it gets some cycles count
+      controller._evaluateInputsValue = () => {
+        ++cyclesCounter;
+        const evaluated = { pass: false, valueNeeded: 120000 };
+        if (cyclesCounter === 3) evaluated.pass = true;
+        return new Promise((resolve) => { resolve(evaluated); });
+      };
+
+      const evalInputsSpy = sinon.spy(controller, '_evaluateInputsValue');
+
+      it('should cycle until it achieves the value needed (receives a successful inputs value)', (done) => {
+        controller._loadMinimumUtxosCycle(handleToTest)
+          .then(() => {
+            should(evalInputsSpy.calledThrice).be.exactly(true);
+            done();
+          })
+          .catch(done);
+      });
+    });
+
     describe('when the utxos are NOT enough', () => {
       const utxosToTest = [
         { value: 90000 },
@@ -393,76 +435,19 @@ describe.only('AssetController', () => {
           });
       });
     });
-
-    describe('when there are not utxos to spend', () => {
-      const utxosToTest = [];
-      const node = {
-        getAddressUnspentOutputs: sinon.stub().callsArgWith(2, null, utxosToTest),
-        services: {
-          bitcoind: {
-            height: 534203,
-          },
-        },
-      };
-      const finalMessage = 'Not enough funds to make the transaction';
-      const handleToTest = Object.assign({}, handle);
-      const buildObject = { txb: { tx: { ins: [], outs: new Array(30) } } };
-      const controller = new AssetController(node);
-      handleToTest.utxos = utxosToTest;
-      controller.addressController._utxo = sinon.stub().callsArgWith(2, null, [].concat(utxosToTest));
-      controller.ccBuildTypes = { issue: () => buildObject };
-      controller._loadBestUtxos = () => new Promise((resolve, reject) => { reject({ message: finalMessage }); });
-      controller._evaluateInputsValue = () => new Promise((resolve) => { resolve({ pass: false, valueNeeded: 130000 }); });
-
-      it('should return not enough funds', (done) => {
-        controller._loadMinimumUtxosCycle(handleToTest)
-          .then(() => {
-            done('should throw no inputs available');
-          })
-          .catch((err) => {
-            should(err.message).be.exactly(finalMessage);
-            done();
-          });
-      });
-    });
   });
 
   describe('_evaluateBuildTxn', () => {
-    const utxosToTest = [
-      {
-        txid: "a3003756db8dd832087b98c5adcce8e1fade89959519713edecccadc44a4d2f4",
-        value: 100000,
-      },
-      {
-        txid: "a3003756db8dd832087b98c5adcce8e1fade89959519713edecccadc44a4d2f4",
-        value: 50000,
-      },
-      {
-        txid: "a3003756db8dd832087b98c5adcce8e1fade89959519713edecccadc44a4d2f4",
-        value: 40000,
-      },
-    ];
-    const handle = {
-      type: 'issue',
-      utxosIterator: 0,
-      includeAssets: false,
-      choosenUtxos: [],
-    };
+    const utxosToTest = [];
+    const handle = { type: 'issue' };
 
-    describe('when the current utxo is enough', () => {
+    describe('When "CASE: first evaluation does not need to do cycles"', () => {
       const body = {
         address: 1,
         amount: 30000,
-        utxos: [ { value: 2000000 } ],
+        utxos: [],
       };
-      const node = {
-        getAddressUnspentOutputs: sinon.stub().callsArgWith(2, null, utxosToTest),
-        services: {
-          bitcoind: {
-            height: 534203,
-          },
-        },
-      };
+      const node = {};
       const buildObject = { txb: { tx: { ins: new Array(1), outs: new Array(30) } } };
       const handleToTest = Object.assign({}, handle, { utxos: body.utxos, body });
       const controller = new AssetController(node);
@@ -482,25 +467,13 @@ describe.only('AssetController', () => {
       });
     });
 
-    describe('when the current utxo is NOT enough', () => {
+    describe('When "CASE: running cycles until inputs value is enough"', () => {
       const body = {
         address: 1,
         amount: 30000,
-        utxos: [
-          {
-            txid: "a3003756db8dd832087b98c5adcce8e1fade89959519713edecccadc44a4d2f4",
-            value: 100000,
-          },
-        ],
+        utxos: [],
       };
-      const node = {
-        getAddressUnspentOutputs: sinon.stub().callsArgWith(2, null, utxosToTest),
-        services: {
-          bitcoind: {
-            height: 534203,
-          },
-        },
-      };
+      const node = {};
       const buildObject = { txb: { tx: { ins: new Array(3), outs: new Array(30) } } };
       const handleToTest = Object.assign({}, handle, { utxos: utxosToTest, body });
       const controller = new AssetController(node);
@@ -509,11 +482,13 @@ describe.only('AssetController', () => {
       controller._evaluateInputsValue = () => new Promise((resolve) => { resolve({ pass: false, valueNeeded: 130000 }); });
       controller._loadMinimumUtxosCycle = () => new Promise((resolve) => { resolve(buildObject); });
 
-      it('should execute res.jsonp after running the cycle', (done) => {
+      const cyclesSpy = sinon.spy(controller, '_loadMinimumUtxosCycle');
+
+      it('should call _loadMinimumUtxosCycle before executing res.jsonp', (done) => {
         controller.common.handleErrors = (err) => { done(err); };
         const res = {
-          jsonp: (result) => {
-            should(result.txb.tx.ins.length).be.exactly(3);
+          jsonp: () => {
+            should(cyclesSpy.calledOnce).be.exactly(true);
             done();
           },
         };
@@ -521,35 +496,30 @@ describe.only('AssetController', () => {
       });
     });
 
-    describe('when there are not utxos for the address', () => {
+    describe('When "CASE: running cycles does NOT get enough inputs value"', () => {
       const body = {
         address: 1,
         amount: 30000,
         utxos: [],
       };
-      const node = {
-        getAddressUnspentOutputs: sinon.stub().callsArgWith(2, null, []),
-        services: {
-          bitcoind: {
-            height: 534203,
-          },
-        },
-      };
-      const finalMessage = 'Not enough funds to make the transaction';
+      const node = {};
       const buildObject = { txb: { tx: { ins: new Array(3), outs: new Array(30) } } };
-      const handleToTest = Object.assign({}, handle, { utxos: [], body });
+      const handleToTest = Object.assign({}, handle, { utxos: utxosToTest, body });
       const controller = new AssetController(node);
       controller.ccBuildTypes = { issue: () => buildObject };
       controller._fetchEstimateFeeRate = () => new Promise((resolve) => { resolve(100000); });
       controller._evaluateInputsValue = () => new Promise((resolve) => { resolve({ pass: false, valueNeeded: 130000 }); });
-      controller._loadMinimumUtxosCycle = () => new Promise((resolve, reject) => { reject({ message: finalMessage }); });
+      controller._loadMinimumUtxosCycle = () => new Promise((resolve, reject) => { reject('rejected'); });
 
-      it('should tell that there are not enough funds', (done) => {
-        const res = { jsonp: () => { done('should not execute response'); } };
+      const cyclesSpy = sinon.spy(controller, '_loadMinimumUtxosCycle');
+
+      it('should call ...common.handleErrors', (done) => {
         controller.common.handleErrors = (err) => {
-          should(err.message).be.exactly('Not enough funds to make the transaction');
+          should(cyclesSpy.calledOnce).be.exactly(true);
+          should(err).be.exactly('rejected');
           done();
         };
+        const res = { jsonp: () => { done('should call error'); } };
         controller._evaluateBuildTxn(handleToTest, res);
       });
     });
