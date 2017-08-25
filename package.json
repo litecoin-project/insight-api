@@ -1,5 +1,5 @@
 {
-  "name": "insight-lite-api",
+  "name": "insight-lite-cc-api",
   "description": "A Litecoin blockchain REST and web socket API service for Litecore Node.",
   "version": "0.4.4",
   "repository": "git://github.com/litecoin-project/insight-lite-api.git",
@@ -55,23 +55,43 @@
     "node": ">=0.12.0"
   },
   "scripts": {
-    "test": "NODE_ENV=test mocha -R spec --recursive"
+    "test": "NODE_ENV=test node_modules/istanbul/lib/cli.js cover _mocha -- -R spec --recursive"
   },
   "main": "lib",
   "bitcoreNode": "lib",
+  "bin": {
+    "litecore-cc": "bin/litecore-cc"
+  },
   "dependencies": {
-    "async": "*",
+    "async": "2.5.0",
+    "bitcoinjs-testnets": "^1.0.10",
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.13.3",
+    "cc-assetid-encoder": "^0.6.2",
+    "cc-transaction": "^1.2.1",
+    "cc-transaction-builder": "git://github.com/genaromadrid/cc-transaction-builder.git#litecoin",
+    "chalk": "^2.0.1",
+    "commander": "^2.10.0",
+    "compression": "^1.6.1",
+    "config": "^1.26.1",
+    "dotenv": "^4.0.0",
+    "liftoff": "^2.3.0",
     "litecore-lib": "^0.13.22",
     "litecore-message": "^1.0.5",
-    "body-parser": "^1.13.3",
-    "compression": "^1.6.1",
     "lodash": "^2.4.1",
     "lru-cache": "^4.0.1",
+    "mkdirp": "^0.5.1",
+    "mongoose": "4.10.8",
     "morgan": "^1.7.0",
     "request": "^2.64.0"
   },
   "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "babel-preset-es2015": "^6.24.1",
     "chai": "^3.5.0",
+    "eslint": "^4.4.1",
+    "eslint-plugin-mocha": "^4.11.0",
+    "istanbul": "^0.4.5",
     "mocha": "^2.4.5",
     "proxyquire": "^1.7.2",
     "should": "^8.3.1",

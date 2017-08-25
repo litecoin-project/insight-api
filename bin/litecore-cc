@@ -1,0 +1,41 @@
+#!/usr/bin/env node
+
+'use strict';
+
+var Liftoff = require('liftoff');
+var dotenv = require('dotenv');
+var fs = require('fs');
+require('litecore-node');
+
+var liftoff = new Liftoff({
+  name: 'litecore-cc',
+  moduleName: 'litecore-node',
+  configName: 'litecore-node',
+  processTitle: 'litecore-cc'
+}).on('require', function (name, module) {
+  console.log('Loading:', name);
+}).on('requireFail', function (name, err) {
+  console.log('Unable to load:', name, err);
+}).on('respawn', function (flags, child) {
+  console.log('Detected node flags:', flags);
+  console.log('Respawned to PID:', child.pid);
+});
+
+liftoff.launch({
+  cwd: process.cwd()
+}, function(env){
+  if (env.modulePackage) {
+    var node = require(env.modulePath);
+    var Litecoind = require('../lib/cli/litecoind')();
+    var options = {
+      protocol: 'http',
+      host: 'localhost',
+      port: '3001'
+    };
+    var litecoind = new Litecoind(node, options);
+    var cli = require('../lib/cli');
+    cli(litecoind);
+  } else {
+    throw new Error('litecore-node required')
+  }
+});
