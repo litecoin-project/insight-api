@@ -1,0 +1,29 @@
+{
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es6": true,
+    "node": true,
+    "mocha": true
+  },
+  "plugins": [
+    "mocha"
+  ],
+  "extends": [
+    "eslint:recommended"
+  ],
+  "rules": {
+    "indent": ["error", 2],
+    "semi": ["error", "always"],
+    "no-console": ["warn"],
+    "object-curly-spacing": ["error", "always"],
+    "array-bracket-spacing": ["error", "always"],
+    "no-mixed-spaces-and-tabs":"error",
+    "comma-dangle": ["error", "always-multiline"],
+    "arrow-body-style": 0,
+    "linebreak-style": 0,
+    "func-names": 0,
+    "camelcase": 0
+  }
+}

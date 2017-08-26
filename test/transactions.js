@@ -1,4 +1,7 @@
 'use strict';
+
+process.env.NODE_ENV = 'test';
+
 var should = require('should');
 var sinon = require('sinon');
 var bitcore = require('litecore-lib');
@@ -975,10 +978,10 @@ describe('Transactions', function() {
         'valueOut': 0.02038504,
         'vout': [
           {
-            '3DQYCLG6rZdtV2Xw8y4YtozZjNHYoKsLuo': 45000
+            'MKcgWDg4ogVKHXoqEr3tiTEy44szm8b52r': 45000
           },
           {
-            '12WvZmssxT85f81dD6wcmWznxbnFkEpNMS': 1993504
+            'LLjspzBi37N8uvhnPEvv3Y4ZAp9Xx2gghb': 1993504
           }
         ],
         'isRBF': false
