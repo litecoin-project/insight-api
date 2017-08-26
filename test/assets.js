@@ -94,6 +94,72 @@ const utxos = [
 ];
 
 describe.only('AssetController', () => {
+  describe('_getUtxo', () => {
+    describe('When the address has some utxos with and without confirmations', () => {
+      const utxosToTest = [
+        { value: 20000, confirmations: 0 },
+        { value: 40000, confirmations: 30 },
+        { value: 50000, confirmations: 0 },
+        { value: 10000, confirmations: 1 },
+        { value: 30000, confirmations: 4 },
+      ];
+      const node = {};
+      const controller = new AssetController(node);
+      controller.addressController._utxo = sinon.stub().callsArgWith(2, null, [].concat(utxosToTest));
+
+      it('Should filter utxos without confirmations and sort them', (done) => {
+        controller._getUtxo('dummy_address')
+          .then((resultUtxos) => {
+            should(resultUtxos.length).be.exactly(3);
+            should(resultUtxos[0].value).be.exactly(40000);
+            should(resultUtxos[2].value).be.exactly(10000);
+            done();
+          })
+          .catch(done);
+      });
+    });
+
+    describe('When the address has utxos but NONE have confirmations', () => {
+      const utxosToTest = [
+        { value: 20000, confirmations: 0 },
+        { value: 40000, confirmations: 0 },
+        { value: 50000, confirmations: 0 },
+      ];
+      const node = {};
+      const controller = new AssetController(node);
+      controller.addressController._utxo = sinon.stub().callsArgWith(2, null, [].concat(utxosToTest));
+
+      it('Should filter utxos and return "MSG_NO_INPUTS_CONFIRMED"', (done) => {
+        controller._getUtxo('dummy_address')
+          .then(() => {
+            done('should not return utxos');
+          })
+          .catch((err) => {
+            should(err.message).be.exactly('The address does not have inputs with confirmations');
+            done();
+          });
+      });
+    });
+
+    describe('When the address does not have utxos', () => {
+      const utxosToTest = [];
+      const node = {};
+      const controller = new AssetController(node);
+      controller.addressController._utxo = sinon.stub().callsArgWith(2, null, [].concat(utxosToTest));
+
+      it('Should filter utxos and return "MSG_NO_INPUTS_ADDRESS"', (done) => {
+        controller._getUtxo('dummy_address')
+          .then(() => {
+            done('should not return utxos');
+          })
+          .catch((err) => {
+            should(err.message).be.exactly('The address does not have inputs');
+            done();
+          });
+      });
+    });
+  });
+
   describe('_calculateMiningFee', () => {
     const node = {};
     const controller = new AssetController(node);
