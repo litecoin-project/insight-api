@@ -14,7 +14,7 @@ litecore-node install insight-lite-api
 litecore-node start
 ```
 
-The API endpoints will be available by default at: `http://localhost:3001/insight-api/`
+The API endpoints will be available by default at: `http://localhost:3001/insight-lite-api/`
 
 ## Prerequisites
 
@@ -125,15 +125,15 @@ Or disabled entirely with:
 
 ### Block
 ```
-  /insight-api/block/[:hash]
-  /insight-api/block/00000000a967199a2fad0877433c93df785a8d8ce062e5f9b451cd1397bdbf62
+  /insight-lite-api/block/[:hash]
+  /insight-lite-api/block/00000000a967199a2fad0877433c93df785a8d8ce062e5f9b451cd1397bdbf62
 ```
 
 ### Block Index
 Get block hash by height
 ```
-  /insight-api/block-index/[:height]
-  /insight-api/block-index/0
+  /insight-lite-api/block-index/[:height]
+  /insight-lite-api/block-index/0
 ```
 This would return:
 ```
@@ -146,8 +146,8 @@ which is the hash of the Genesis block (0 height)
 
 ### Raw Block
 ```
-  /insight-api/rawblock/[:blockHash]
-  /insight-api/rawblock/[:blockHeight]
+  /insight-lite-api/rawblock/[:blockHash]
+  /insight-lite-api/rawblock/[:blockHeight]
 ```
 
 This would return:
@@ -161,7 +161,7 @@ This would return:
 
 Get block summaries by date:
 ```
-  /insight-api/blocks?limit=3&blockDate=2016-04-22
+  /insight-lite-api/blocks?limit=3&blockDate=2016-04-22
 ```
 
 Example response:
@@ -195,31 +195,31 @@ Example response:
 
 ### Transaction
 ```
-  /insight-api/tx/[:txid]
-  /insight-api/tx/525de308971eabd941b139f46c7198b5af9479325c2395db7f2fb5ae8562556c
-  /insight-api/rawtx/[:rawid]
-  /insight-api/rawtx/525de308971eabd941b139f46c7198b5af9479325c2395db7f2fb5ae8562556c
+  /insight-lite-api/tx/[:txid]
+  /insight-lite-api/tx/525de308971eabd941b139f46c7198b5af9479325c2395db7f2fb5ae8562556c
+  /insight-lite-api/rawtx/[:rawid]
+  /insight-lite-api/rawtx/525de308971eabd941b139f46c7198b5af9479325c2395db7f2fb5ae8562556c
 ```
 
 ### Address
 ```
-  /insight-api/addr/[:addr][?noTxList=1][&from=&to=]
-  /insight-api/addr/mmvP3mTe53qxHdPqXEvdu8WdC7GfQ2vmx5?noTxList=1
-  /insight-api/addr/mmvP3mTe53qxHdPqXEvdu8WdC7GfQ2vmx5?from=1000&to=2000
+  /insight-lite-api/addr/[:addr][?noTxList=1][&from=&to=]
+  /insight-lite-api/addr/mmvP3mTe53qxHdPqXEvdu8WdC7GfQ2vmx5?noTxList=1
+  /insight-lite-api/addr/mmvP3mTe53qxHdPqXEvdu8WdC7GfQ2vmx5?from=1000&to=2000
 ```
 
 ### Address Properties
 ```
-  /insight-api/addr/[:addr]/balance
-  /insight-api/addr/[:addr]/totalReceived
-  /insight-api/addr/[:addr]/totalSent
-  /insight-api/addr/[:addr]/unconfirmedBalance
+  /insight-lite-api/addr/[:addr]/balance
+  /insight-lite-api/addr/[:addr]/totalReceived
+  /insight-lite-api/addr/[:addr]/totalSent
+  /insight-lite-api/addr/[:addr]/unconfirmedBalance
 ```
 The response contains the value in Satoshis.
 
 ### Unspent Outputs
 ```
-  /insight-api/addr/[:addr]/utxo
+  /insight-lite-api/addr/[:addr]/utxo
 ```
 Sample return:
 ```
@@ -250,13 +250,13 @@ Sample return:
 ### Unspent Outputs for Multiple Addresses
 GET method:
 ```
-  /insight-api/addrs/[:addrs]/utxo
-  /insight-api/addrs/2NF2baYuJAkCKo5onjUKEPdARQkZ6SYyKd5,2NAre8sX2povnjy4aeiHKeEh97Qhn97tB1f/utxo
+  /insight-lite-api/addrs/[:addrs]/utxo
+  /insight-lite-api/addrs/2NF2baYuJAkCKo5onjUKEPdARQkZ6SYyKd5,2NAre8sX2povnjy4aeiHKeEh97Qhn97tB1f/utxo
 ```
 
 POST method:
 ```
-  /insight-api/addrs/utxo
+  /insight-lite-api/addrs/utxo
 ```
 
 POST params:
@@ -266,25 +266,25 @@ addrs: 2NF2baYuJAkCKo5onjUKEPdARQkZ6SYyKd5,2NAre8sX2povnjy4aeiHKeEh97Qhn97tB1f
 
 ### Transactions by Block
 ```
-  /insight-api/txs/?block=HASH
-  /insight-api/txs/?block=00000000fa6cf7367e50ad14eb0ca4737131f256fc4c5841fd3c3f140140e6b6
+  /insight-lite-api/txs/?block=HASH
+  /insight-lite-api/txs/?block=00000000fa6cf7367e50ad14eb0ca4737131f256fc4c5841fd3c3f140140e6b6
 ```
 ### Transactions by Address
 ```
-  /insight-api/txs/?address=ADDR
-  /insight-api/txs/?address=mmhmMNfBiZZ37g1tgg2t8DDbNoEdqKVxAL
+  /insight-lite-api/txs/?address=ADDR
+  /insight-lite-api/txs/?address=mmhmMNfBiZZ37g1tgg2t8DDbNoEdqKVxAL
 ```
 
 ### Transactions for Multiple Addresses
 GET method:
 ```
-  /insight-api/addrs/[:addrs]/txs[?from=&to=]
-  /insight-api/addrs/2NF2baYuJAkCKo5onjUKEPdARQkZ6SYyKd5,2NAre8sX2povnjy4aeiHKeEh97Qhn97tB1f/txs?from=0&to=20
+  /insight-lite-api/addrs/[:addrs]/txs[?from=&to=]
+  /insight-lite-api/addrs/2NF2baYuJAkCKo5onjUKEPdARQkZ6SYyKd5,2NAre8sX2povnjy4aeiHKeEh97Qhn97tB1f/txs?from=0&to=20
 ```
 
 POST method:
 ```
-  /insight-api/addrs/txs
+  /insight-lite-api/addrs/txs
 ```
 
 POST params:
@@ -330,7 +330,7 @@ Note: if pagination params are not specified, the result is an array of transact
 ### Transaction Broadcasting
 POST method:
 ```
-  /insight-api/tx/send
+  /insight-lite-api/tx/send
 ```
 POST params:
 ```
@@ -356,17 +356,17 @@ POST response:
 
 ### Historic Blockchain Data Sync Status
 ```
-  /insight-api/sync
+  /insight-lite-api/sync
 ```
 
 ### Live Network P2P Data Sync Status
 ```
-  /insight-api/peer
+  /insight-lite-api/peer
 ```
 
 ### Status of the Bitcoin Network
 ```
-  /insight-api/status?q=xxx
+  /insight-lite-api/status?q=xxx
 ```
 
 Where "xxx" can be:
@@ -379,7 +379,7 @@ Where "xxx" can be:
 
 ### Utility Methods
 ```
-  /insight-api/utils/estimatefee[?nbBlocks=2]
+  /insight-lite-api/utils/estimatefee[?nbBlocks=2]
 ```
 
 
