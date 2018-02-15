@@ -48,6 +48,12 @@
 		"/Garlicsoup.xyz/"
 	]
 }, {
+        "poolName": "Garlic Machine",
+	"url": "http://garlicmachine.redirectme.net",
+	"searchStrings": [
+		"/Garlic Machine/"
+	]
+}, {
 	"poolName": "WildGarlic",
 	"url": "https://wildgarlic.fun/",
 	"searchStrings": [
