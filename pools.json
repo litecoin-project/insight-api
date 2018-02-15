@@ -53,4 +53,11 @@
 	"searchStrings": [
 		"WildGarlic"
 	]
+}, {
+	"poolName": "GarlicBois",
+	"url": "https://garlicbois.com/",
+	"searchStrings": [
+		"/GarlicBois/"
+	]
+	
 }]
