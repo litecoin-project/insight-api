@@ -1,62 +1,69 @@
 [{
-		"poolName": "AntMiner",
-		"url": "https://bitmaintech.com/",
-		"searchStrings": [
-			"AntPool"
-		]
-	},
-	{
-		"poolName": "Discus Fish",
-		"url": "http://f2pool.com/",
-		"searchStrings": [
-			"🐟",
-			"七彩神仙鱼",
-			"Made in China",
-			"Mined by user",
-			"Mined by gumi",
-		  	"Mined by "
-		]
-	},
-	{
-		"poolName": "Batpool",
-		"url": "https://batpool.com",
-		"searchStrings": [
-			"BATPOOL"
-		]
-	},
-	{
-		"poolName": "BW",
-		"url": "https://www.bw.com",
-		"searchStrings": [
-			"/BW/"
-		]
-	},
-	{
-		"poolName": "LTC.TOP",
-		"url": "http://",
-		"searchStrings": [
-			"LTC.TOP"
-		]
-	},
-	{
-	  	"poolName": "LitecoinPool",
-	  	"url": "https://litecoinpool.org",
-	  	"searchStrings": [
-		  	"/LP/"
-		]
-	},
-	{
-	  	"poolName": "ViaLTC",
-	  	"url": "https://www.vialtc.com/",
-	  	"searchStrings": [
-		  	"/ViaLTC/"
-		]
-	},
-	{
-		"poolName": "TBDice",
-		"url": "http://ltc.tbdice.org/",
-		"searchStrings": [
-			"TBDice"
-		]
-	}
-]
+	"poolName": "Bakery",
+	"url": "https://grlc-bakery.fun/",
+	"searchStrings": [
+		"/Bakery/"
+	]
+}, {
+	"poolName": "ButterPool",
+	"url": "https://butterpool.com/",
+	"searchStrings": [
+		"/ButterPool/"
+	]
+}, {
+	"poolName": "FreshGRLC.net",
+	"url": "https://freshgrlc.net/",
+	"searchStrings": [
+		"/FreshGRLC.net/"
+	]
+}, {
+	"poolName": "Garlicpool.org",
+	"url": "https://www.garlicpool.org/",
+	"searchStrings": [
+		"/Garlicpool EU/",
+		"/Garlicpool US/"
+	]
+}, {
+	"poolName": "Garlic Bread Pool",
+	"url": "https://www.garlicbread.xyz/",
+	"searchStrings": [
+		"/GBP/"
+	]
+}, {
+	"poolName": "GarlicoinPool.com",
+	"url": "https://garlicoinpool.com",
+	"searchStrings": [
+		"GarlicoinPool.com"
+	]
+}, {
+	"poolName": "Garlic Factory",
+	"url": "https://garlic-factory.fun/",
+	"searchStrings": [
+		"/Garlic Factory/"
+	]
+}, {
+	"poolName": "Garlicsoup.xyz",
+	"url": "https://pool.garlicsoup.xyz/",
+	"searchStrings": [
+		"/Garlicsoup.xyz/"
+	]
+}, {
+        "poolName": "Garlic Machine",
+	"url": "http://garlicmachine.redirectme.net",
+	"searchStrings": [
+		"/Garlic Machine/"
+	]
+}, {
+	"poolName": "WildGarlic",
+	"url": "https://wildgarlic.fun/",
+	"searchStrings": [
+		"WildGarlic"
+	]
+}, {
+	"poolName": "GarlicBois",
+	"url": "https://garlicbois.com/",
+	"searchStrings": [
+		"/GarlicBois/"
+	]
+	
+}]
