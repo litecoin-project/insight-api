@@ -66,4 +66,19 @@
 	"searchStrings": [
 		"WildGarlic"
 	]
+}, {
+	"poolName": "GarlicBois",
+	"url": "https://garlicbois.com/",
+	"searchStrings": [
+		"/GarlicBois/"
+	]
+}, {
+	"poolName": "The RypeNation",
+	"url": "http://rypenation.club/",
+	"searchStrings": [
+		"/RypeNation/",
+		"/The RypeNation/",
+		"/RypeNation.club/",
+		"/RypeDub/"
+	]
 }]
