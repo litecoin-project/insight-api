@@ -17,6 +17,13 @@
 		"/FreshGRLC.net/"
 	]
 }, {
+	"poolName": "GarlicBois",
+	"url": "https://garlicbois.com/",
+	"searchStrings": [
+		"/GarlicBois/"
+	]
+	
+}, {
 	"poolName": "Garlicpool.org",
 	"url": "https://www.garlicpool.org/",
 	"searchStrings": [
@@ -59,11 +66,4 @@
 	"searchStrings": [
 		"WildGarlic"
 	]
-}, {
-	"poolName": "GarlicBois",
-	"url": "https://garlicbois.com/",
-	"searchStrings": [
-		"/GarlicBois/"
-	]
-	
 }]
