@@ -66,6 +66,12 @@
 	"searchStrings": [
 		"WildGarlic"
 	]
+},  {
+	"poolName": "HRY-Mining.co",
+	"url": "http://hry-mining.co/",
+	"searchStrings": [
+		"HRY-Mining.co"
+	]
 }, {
 	"poolName": "GarlicBois",
 	"url": "https://garlicbois.com/",
