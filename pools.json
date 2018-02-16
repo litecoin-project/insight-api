@@ -40,7 +40,7 @@
 	"poolName": "GarlicoinPool.com",
 	"url": "https://garlicoinpool.com",
 	"searchStrings": [
-		"GarlicoinPool.com"
+		"/GarlicoinPool.com/"
 	]
 }, {
 	"poolName": "Garlic Factory",
@@ -64,13 +64,13 @@
 	"poolName": "WildGarlic",
 	"url": "https://wildgarlic.fun/",
 	"searchStrings": [
-		"WildGarlic"
+		"/WildGarlic/"
 	]
 },  {
 	"poolName": "HRY-Mining.co",
 	"url": "http://hry-mining.co/",
 	"searchStrings": [
-		"HRY-Mining.co"
+		"/HRY-Mining.co/"
 	]
 }, {
 	"poolName": "GarlicBois",
