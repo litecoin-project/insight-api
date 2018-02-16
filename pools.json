@@ -87,4 +87,10 @@
 		"/RypeNation.club/",
 		"/RypeDub/"
 	]
+}, {
+	"poolName": "grlc.co",
+	"url": "http://grlc.co/",
+	"searchStrings": [
+		"/grlc.co/"
+	]
 }]
