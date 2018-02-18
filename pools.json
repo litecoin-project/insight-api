@@ -17,6 +17,12 @@
 		"/FreshGRLC.net/"
 	]
 }, {
+	"poolName": "Garlic Bread Pool",
+	"url": "https://www.garlicbread.xyz/",
+	"searchStrings": [
+		"/GBP/"
+	]
+}, {
 	"poolName": "GarlicBois",
 	"url": "https://garlicbois.com/",
 	"searchStrings": [
@@ -24,35 +30,10 @@
 	]
 	
 }, {
-	"poolName": "Garlicpool.org",
-	"url": "https://www.garlicpool.org/",
-	"searchStrings": [
-		"/Garlicpool EU/",
-		"/Garlicpool US/"
-	]
-}, {
-	"poolName": "Garlic Bread Pool",
-	"url": "https://www.garlicbread.xyz/",
-	"searchStrings": [
-		"/GBP/"
-	]
-}, {
-	"poolName": "GarlicoinPool.com",
-	"url": "https://garlicoinpool.com",
-	"searchStrings": [
-		"/GarlicoinPool.com/"
-	]
-}, {
 	"poolName": "Garlic Factory",
 	"url": "https://garlic-factory.fun/",
 	"searchStrings": [
 		"/Garlic Factory/"
-	]
-}, {
-	"poolName": "Garlicsoup.xyz",
-	"url": "https://pool.garlicsoup.xyz/",
-	"searchStrings": [
-		"/Garlicsoup.xyz/"
 	]
 }, {
         "poolName": "Garlic Machine",
@@ -61,22 +42,53 @@
 		"/Garlic Machine/"
 	]
 }, {
-	"poolName": "WildGarlic",
-	"url": "https://wildgarlic.fun/",
+        "poolName": "Garlicmine",
+	"url": "https://garlicmine.com/",
 	"searchStrings": [
-		"/WildGarlic/"
+		"/Garlicmine/"
 	]
-},  {
+}, {
+	"poolName": "GarlicoinPool.com",
+	"url": "https://garlicoinpool.com",
+	"searchStrings": [
+		"/GarlicoinPool.com/"
+	]
+}, {
+	"poolName": "Garlicpool.org",
+	"url": "https://www.garlicpool.org/",
+	"searchStrings": [
+		"/Garlicpool EU/",
+		"/Garlicpool US/"
+	]
+}, {
+	"poolName": "Garlicsoup.xyz",
+	"url": "https://pool.garlicsoup.xyz/",
+	"searchStrings": [
+		"/Garlicsoup.xyz/"
+	]
+}, {
+	"poolName": "grlc.co",
+	"url": "http://grlc.co/",
+	"searchStrings": [
+		"/grlc.co/"
+	]
+}, {
+	"poolName": "Happy Garlic",
+	"url": "http://happy.garlicoin.fun/",
+	"searchStrings": [
+		"/HappyGarlic/"
+	]
+}, {
 	"poolName": "HRY-Mining.co",
 	"url": "http://hry-mining.co/",
 	"searchStrings": [
 		"/HRY-Mining.co/"
 	]
 }, {
-	"poolName": "GarlicBois",
-	"url": "https://garlicbois.com/",
+	"poolName": "MineGarlic",
+	"url": "https://minegarlic.com/",
 	"searchStrings": [
-		"/GarlicBois/"
+		"/MineGarlic/"
 	]
 }, {
 	"poolName": "The RypeNation",
@@ -86,17 +98,5 @@
 		"/The RypeNation/",
 		"/RypeNation.club/",
 		"/RypeDub/"
-	]
-}, {
-	"poolName": "grlc.co",
-	"url": "http://grlc.co/",
-	"searchStrings": [
-		"/grlc.co/"
-	]
-}, {
-	"poolName": "MineGarlic",
-	"url": "https://minegarlic.com/",
-	"searchStrings": [
-		"/MineGarlic/"
 	]
 }]
