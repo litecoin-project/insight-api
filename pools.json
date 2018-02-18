@@ -99,4 +99,10 @@
 		"/RypeNation.club/",
 		"/RypeDub/"
 	]
+}, {
+	"poolName": "GarlicPress",
+	"url": "http://www.garlicpress.eu/",
+	"searchStrings": [
+		"/GarlicPress/"
+	]
 }]
