@@ -106,6 +106,12 @@
 		"/GarlicPress/"
 	]
 }, {
+	"poolName": "Spatula City",
+	"url": "http://garlic.spatula.city/",
+	"searchStrings": [
+		"/Spatula City/"
+	]
+}, {
 	"poolName": "Unknown NOMP",
 	"url": "https://garlicinsight.com",
 	"searchStrings": [
