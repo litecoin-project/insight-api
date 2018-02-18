@@ -112,6 +112,12 @@
 		"/Spatula City/"
 	]
 }, {
+	"poolName": "Bread Pool",
+	"url": "http://breadpool.org/",
+	"searchStrings": [
+		"/Breadpool/"
+	]
+}, {
 	"poolName": "Unknown NOMP",
 	"url": "https://garlicinsight.com",
 	"searchStrings": [
