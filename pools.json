@@ -105,4 +105,10 @@
 	"searchStrings": [
 		"/GarlicPress/"
 	]
+}, {
+	"poolName": "Unknown NOMP",
+	"url": "https://garlicinsight.com",
+	"searchStrings": [
+		"/nodeStratum/"
+	]
 }]
