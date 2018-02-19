@@ -117,6 +117,12 @@
 	"searchStrings": [
 		"/Breadpool/"
 	]
+},{
+	"poolName": "grlc.suprnova.cc",
+	"url": "https://grlc.suprnova.cc/",
+	"searchStrings": [
+		"/grlc.suprnova.cc/"
+	]
 }, {
 	"poolName": "Anonymous Pool",
 	"url": "https://garlicinsight.com",
