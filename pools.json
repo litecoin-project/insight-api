@@ -129,4 +129,10 @@
 	"searchStrings": [
 		"/nodeStratum/"
 	]
+}, {
+	"poolName": "Cage Coin Pool",
+	"url": "https://cagecoinpool.com/",
+	"searchStrings": [
+		"/cagecoinpool/"
+	]
 }]
