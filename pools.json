@@ -135,4 +135,10 @@
 	"searchStrings": [
 		"/cagecoinpool/"
 	]
+}, {
+	"poolName": "Golden Loaves",
+	"url": "http://goldenloaves.xyz",
+	"searchStrings": [
+		"/GoldenLoaves/"
+	]
 }]
