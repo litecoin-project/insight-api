@@ -67,6 +67,12 @@
 		"/Garlicsoup.xyz/"
 	]
 }, {
+	"poolName": "GetGRLC",
+	"url": "https://getgrlc.com/",
+	"searchStrings": [
+		"/GetGRLC.com/"
+	]
+}, {
 	"poolName": "grlc.co",
 	"url": "http://grlc.co/",
 	"searchStrings": [
