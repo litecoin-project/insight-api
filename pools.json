@@ -153,4 +153,10 @@
 	"searchStrings": [
 		"/Garlic Legends/"	
 	]
+}, {
+	"poolName": "GRLC Gang",
+	"url": "http://pool.grlc.life",
+	"searchStrings": [
+		"/GRLC Gang/"
+	]
 }]
