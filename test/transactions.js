@@ -1,7 +1,7 @@
 'use strict';
 var should = require('should');
 var sinon = require('sinon');
-var bitcore = require('litecore-lib');
+var bitcore = require('garlicore-lib');
 var TxController = require('../lib/transactions');
 var _ = require('lodash');
 
